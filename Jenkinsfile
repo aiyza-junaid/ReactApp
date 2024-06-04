@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/aditya-sridhar/simple-reactjs-app'
+                git url: 'https://github.com/aiyza-junaid/ReactApp.git'
             }
         }
 
