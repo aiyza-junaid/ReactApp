@@ -1,15 +1,11 @@
+
 pipeline {
     agent any
-
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
-        DOCKER_IMAGE = 'aiyzajunaid/simple-reactjs-app'
-    }
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/aiyza-junaid/ReactApp.git'
+                git branch: 'master', url: 'https://github.com/aiyza-junaid/ReactApp.git'
             }
         }
 
@@ -21,34 +17,16 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("${DOCKER_IMAGE}:${env.BUILD_ID}")
-                }
+                bat 'docker build -t dockerr .'
             }
         }
 
         stage('Run Docker Image') {
             steps {
-                script {
-                    dockerImage.run('-p 5000:5000')
-                }
+                bat 'docker run -d -p 3000:11 dockerr'
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('', 'dockerhub-credentials') {
-                        dockerImage.push('latest')
-                    }
-                }
-            }
+       
         }
-    }
-
-    post {
-        always {
-            cleanWs()
-        }
-    }
 }
